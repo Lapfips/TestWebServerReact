@@ -2,8 +2,9 @@ import { saveAs } from "file-saver";
 import Papa from "papaparse";
 import { PDFDocument, rgb } from "pdf-lib";
 import React, { useState } from "react";
+import "./Download.css";
 
-const Main = () => {
+const Download = () => {
   const [csvData, setCsvData] = useState([]);
   const [pdfUrl, setPdfUrl] = useState(null);
 
@@ -30,7 +31,6 @@ const Main = () => {
 
   const createAndPreviewPDF = async () => {
     const jsonCsvFile = csvData;
-
     const totalHT = jsonCsvFile.reduce(
       (sum, item) => sum + item.quantite * item.prixUnitaire,
       0
@@ -53,27 +53,27 @@ const Main = () => {
     jsonCsvFile.forEach((item) => {
       yPosition -= 20;
       page.drawText(
-        `${item.description} - Quantité : ${item.quantite} - Prix unitaire : ${
+        `${item.description} - Quantité: ${item.quantite} - Prix unitaire: ${
           item.prixUnitaire
-        }€ - Total : ${item.quantite * item.prixUnitaire}€`,
+        }€ - Total: ${item.quantite * item.prixUnitaire}€`,
         { x: 50, y: yPosition, size: 12, color: rgb(0, 0, 0) }
       );
     });
 
     yPosition -= 40;
-    page.drawText(`Total HT : ${totalHT.toFixed(2)}€`, {
+    page.drawText(`Total HT: ${totalHT.toFixed(2)}€`, {
       x: 50,
       y: yPosition,
       size: 12,
       color: rgb(0, 0, 0),
     });
-    page.drawText(`TVA (20%) : ${tva.toFixed(2)}€`, {
+    page.drawText(`TVA (20%): ${tva.toFixed(2)}€`, {
       x: 50,
       y: yPosition - 20,
       size: 12,
       color: rgb(0, 0, 0),
     });
-    page.drawText(`Total TTC : ${totalTTC.toFixed(2)}€`, {
+    page.drawText(`Total TTC: ${totalTTC.toFixed(2)}€`, {
       x: 50,
       y: yPosition - 40,
       size: 12,
@@ -93,20 +93,24 @@ const Main = () => {
   };
 
   return (
-    <>
-      <input type="file" accept=".csv" onChange={handleFileChange} />
-      {!pdfUrl ? (
-        <button onClick={createAndPreviewPDF}>Preview PDF</button>
-      ) : (
-        <button onClick={togglePdfUrl}>Hide Preview PDF</button>
-      )}
-      {pdfUrl && <button onClick={downloadPDF}>Download PDF</button>}
-      {pdfUrl && <iframe src={pdfUrl} width="600" height="400" />}
-      {csvData.length > 0 ? (
-        <pre>{JSON.stringify(csvData, null, 2)}</pre>
-      ) : null}
-    </>
+    <div className="container-download">
+      <div className="inputs-and-buttons">
+        <input
+          className="input-csv-file"
+          type="file"
+          accept=".csv"
+          onChange={handleFileChange}
+        />
+        {!pdfUrl ? (
+          <button onClick={createAndPreviewPDF}>Show PDF preview</button>
+        ) : (
+          <button onClick={togglePdfUrl}>Hide PDF preview</button>
+        )}
+        {pdfUrl && <button onClick={downloadPDF}>Download PDF</button>}
+      </div>
+      <div className="preview-pdf">{pdfUrl && <iframe src={pdfUrl} />}</div>
+    </div>
   );
 };
 
-export default Main;
+export default Download;

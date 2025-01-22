@@ -2,9 +2,8 @@ import React from "react";
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 import About from "./About";
 import "./App.css";
+import Connections from "./Connections";
 import Home from "./Home";
-import Login from "./Login";
-import SignIn from "./SignIn";
 
 const NavigationBar = () => {
   return (
@@ -24,8 +23,8 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signin" element={<SignIn />} />
+        <Route path="/login" element={<Connections showSignIn={false} />} />
+        <Route path="/signin" element={<Connections showSignIn={true} />} />
       </Routes>
     </BrowserRouter>
   );

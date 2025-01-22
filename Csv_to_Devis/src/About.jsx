@@ -1,7 +1,12 @@
 import React from "react";
+import "./About.css";
 
 const About = () => {
-  return <h2>About us</h2>;
+  return (
+    <div className="container-about">
+      <h2>About us</h2>
+    </div>
+  );
 };
 
 export default About;

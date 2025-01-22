@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-
 import Login from "./Login";
+import "./SignIn.css";
 
 const SignIn = () => {
   const [firstName, setFirstName] = useState("");
@@ -10,65 +10,95 @@ const SignIn = () => {
   const [passwordCheck, setPasswordCheck] = useState("");
   const [company, setCompany] = useState("");
   const [showLogIn, setShowLogIn] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const createAccount = () => {
-    /* Check if firstname and lastname not already in database && password === passwordCheck && email not in database && company in available companies */
-    return;
+    if (password !== passwordCheck) {
+      setErrorMessage("Passwords do not match");
+      return;
+    }
+
+    setLoading(true);
+    setSuccessMessage("");
+    setErrorMessage("");
+
+    // Fetch or POST request to API for creating account
+    setTimeout(() => {
+      setLoading(false);
+      setSuccessMessage("Account created successfully");
+    }, 2000); // Simulated network delay
   };
 
   return (
-    <>
+    <div className="signin-form">
+      {loading && <p>Loading...</p>}
+      {errorMessage && <p className="error">{errorMessage}</p>}
+      {successMessage && <p className="success">{successMessage}</p>}
       {showLogIn ? (
         <Login />
       ) : (
         <>
-          <input
-            id="firstName"
-            type="text"
-            placeholder="FirstName"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-          />
-          <input
-            id="lastName"
-            type="text"
-            placeholder="LastName"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-          />
-          <input
-            id="email"
-            type="email"
-            placeholder="Email address"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <input
-            id="password"
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <input
-            id="password_check"
-            type="password"
-            placeholder="Write your password again"
-            value={passwordCheck}
-            onChange={(e) => setPasswordCheck(e.target.value)}
-          />
-          <input
-            id="company"
-            type="text"
-            placeholder="Company name"
-            value={company}
-            onChange={(e) => setCompany(e.target.value)}
-          />
-          <button onClick={createAccount}>Create an account</button>
-          <button onClick={() => setShowLogIn(true)}>Login</button>
+          <div className="user-inputs">
+            <label htmlFor="firstName">First Name</label>
+            <input
+              id="firstName"
+              type="text"
+              placeholder="FirstName"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+            />
+            <label htmlFor="lastName">Last Name</label>
+            <input
+              id="lastName"
+              type="text"
+              placeholder="LastName"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+            />
+            <label htmlFor="email">Email Address</label>
+            <input
+              id="email"
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <label htmlFor="password">Password</label>
+            <input
+              id="password"
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <label htmlFor="passwordCheck">Confirm Password</label>
+            <input
+              id="passwordCheck"
+              type="password"
+              placeholder="Write your password again"
+              value={passwordCheck}
+              onChange={(e) => setPasswordCheck(e.target.value)}
+            />
+            <label htmlFor="company">Company Name</label>
+            <input
+              id="company"
+              type="text"
+              placeholder="Company name"
+              value={company}
+              onChange={(e) => setCompany(e.target.value)}
+            />
+          </div>
+          <div className="user-actions">
+            <button onClick={createAccount} disabled={loading}>
+              Create an account
+            </button>
+            <button onClick={() => setShowLogIn(true)}>Login</button>
+          </div>
         </>
       )}
-    </>
+    </div>
   );
 };
 
